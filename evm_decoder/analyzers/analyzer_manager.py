@@ -163,7 +163,6 @@ class AnalyzerManager:
                         to_address = ensure_hex_string(log['topics'][2][-40:])
                         value = int(ensure_hex_string(log['data']), 16)
                         token_address = log['address'].lower()
-                        print("transfer from ", from_address, " to ", to_address, " value ", value, " token_address ", token_address)
                         # Update balance for sender
                         if from_address not in balance_changes:
                             balance_changes[from_address] = {}
@@ -180,7 +179,7 @@ class AnalyzerManager:
                     try:
                         destination = ensure_hex_string(log['topics'][1][-40:])
                         value = int(ensure_hex_string(log['data']), 16)
-                        balance_changes[operator]['native'] = balance_changes[operator].get('native', 0) - value
+                        balance_changes[destination]['native'] = balance_changes[destination].get('native', 0) + value
                     except Exception as e:
                         logger.error(f"Error processing WETH withdrawal event: {str(e)}")
                         continue
