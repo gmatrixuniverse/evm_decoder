@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="evm-decoder",
-    version="0.1.4",
+    version="0.1.5",
     author="gmatrixuniverse",
     author_email="gmatrixuniverse@gmail.com",
     description="A package for decoding and analyzing EVM transactions and logs",
