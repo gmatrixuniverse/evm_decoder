@@ -1,7 +1,7 @@
 from typing import Dict, Any, List
 from web3 import Web3
 from chain_index import get_chain_info
-from ..utils.constants import TRANSFER_TOPIC, WITHDRAWAL_TOPIC, DEPOSIT_TOPIC
+from ..utils.constants import TRANSFER_TOPIC, WITHDRAWAL_TOPIC, DEPOSIT_TOPIC, ERC20_TRANSFER_TOPIC
 from ..utils.hex_utils import ensure_hex_string
 import logging
 import binascii
@@ -174,6 +174,21 @@ class AnalyzerManager:
                         balance_changes[to_address][token_address] = balance_changes[to_address].get(token_address, 0) + value
                     except Exception as e:
                         # logger.error(f"Error processing event in get_balance_change: {str(e)}")
+                        continue
+                elif topic0 == ERC20_TRANSFER_TOPIC:
+                    try:
+                        from_address = ensure_hex_string(log['topics'][1][-40:])
+                        to_address = ensure_hex_string(log['topics'][2][-40:])
+                        value = int(ensure_hex_string(log['data']), 16)
+                        token_address = log['address'].lower()
+                        if from_address not in balance_changes:
+                            balance_changes[from_address] = {}
+                        balance_changes[from_address][token_address] = balance_changes[from_address].get(token_address, 0) - value
+
+                        if to_address not in balance_changes:
+                            balance_changes[to_address] = {}
+                        balance_changes[to_address][token_address] = balance_changes[to_address].get(token_address, 0) + value
+                    except Exception as e:
                         continue
                 elif topic0 == WITHDRAWAL_TOPIC and log['address'].lower() == weth_address:
                     try:
