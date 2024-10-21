@@ -29,12 +29,12 @@ class AnalyzerManager:
 
         for log in tx_with_logs['logs']:
             if 'topics' in log:
-                topic0 = self.ensure_hex_string(log['topics'][0])
+                topic0 = ensure_hex_string(log['topics'][0])
                 if topic0 == TRANSFER_TOPIC:
                     try:
-                        from_address = self.ensure_hex_string(log['topics'][1][-40:])
-                        to_address = self.ensure_hex_string(log['topics'][2][-40:])
-                        value = int(self.ensure_hex_string(log['data']), 16)
+                        from_address = ensure_hex_string(log['topics'][1][-40:])
+                        to_address = ensure_hex_string(log['topics'][2][-40:])
+                        value = int(ensure_hex_string(log['data']), 16)
                         token_address = log['address'].lower()
                         # Update balance for sender
                         token_transfers.append({
@@ -48,8 +48,8 @@ class AnalyzerManager:
                         continue
                 elif topic0 == WITHDRAWAL_TOPIC and log['address'].lower() == weth_address:
                     try:
-                        destination = '0x' + self.ensure_hex_string(log['topics'][1])[-40:]
-                        value = int(self.ensure_hex_string(log['data']), 16)
+                        destination = ensure_hex_string(log['topics'][1][-40:])
+                        value = int(ensure_hex_string(log['data']), 16)
                         token_transfers.append({
                             'from_address': weth_address,
                             'to_address': destination,
@@ -67,8 +67,8 @@ class AnalyzerManager:
                         continue
                 elif topic0 == DEPOSIT_TOPIC and log['address'].lower() == weth_address:
                     try:
-                        to_address = '0x' + self.ensure_hex_string(log['topics'][1])[-40:]
-                        value = int(self.ensure_hex_string(log['data']), 16)
+                        to_address = ensure_hex_string(log['topics'][1][-40:])
+                        value = int(ensure_hex_string(log['data']), 16)
                         token_transfers.append({
                             'from_address': weth_address,
                             'to_address': to_address,
@@ -156,12 +156,12 @@ class AnalyzerManager:
 
         for log in tx_with_logs['logs']:
             if 'topics' in log:
-                topic0 = self.ensure_hex_string(log['topics'][0])
+                topic0 = ensure_hex_string(log['topics'][0])
                 if topic0 == TRANSFER_TOPIC:
                     try:
-                        from_address = self.ensure_hex_string(log['topics'][1][-40:])
-                        to_address = self.ensure_hex_string(log['topics'][2][-40:])
-                        value = int(self.ensure_hex_string(log['data']), 16)
+                        from_address = ensure_hex_string(log['topics'][1][-40:])
+                        to_address = ensure_hex_string(log['topics'][2][-40:])
+                        value = int(ensure_hex_string(log['data']), 16)
                         token_address = log['address'].lower()
                         print("transfer from ", from_address, " to ", to_address, " value ", value, " token_address ", token_address)
                         # Update balance for sender
@@ -178,8 +178,8 @@ class AnalyzerManager:
                         continue
                 elif topic0 == WITHDRAWAL_TOPIC and log['address'].lower() == weth_address:
                     try:
-                        destination = self.ensure_hex_string(log['topics'][1][-40:])
-                        value = int(self.ensure_hex_string(log['data']), 16)
+                        destination = ensure_hex_string(log['topics'][1][-40:])
+                        value = int(ensure_hex_string(log['data']), 16)
                         balance_changes[operator]['native'] = balance_changes[operator].get('native', 0) - value
                     except Exception as e:
                         logger.error(f"Error processing WETH withdrawal event: {str(e)}")
