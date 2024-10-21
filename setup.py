@@ -5,13 +5,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="evm-decoder",
-    version="0.1.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    version="0.1.2",
+    author="gmatrixuniverse",
+    author_email="gmatrixuniverse@gmail.com",
     description="A package for decoding and analyzing EVM transactions and logs",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/evm-decoder",
+    url="https://github.com/gmatrixuniverse/evm-decoder",
     packages=find_packages(include=['evm_decoder', 'evm_decoder.*']),
     classifiers=[
         "Development Status :: 3 - Alpha",

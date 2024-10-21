@@ -2,6 +2,7 @@ from typing import Dict, Any, List
 from web3 import Web3
 from chain_index import get_chain_info
 from ..utils.constants import TRANSFER_TOPIC, WITHDRAWAL_TOPIC, DEPOSIT_TOPIC
+from ..utils.hex_utils import ensure_hex_string
 import logging
 import binascii
 
@@ -177,7 +178,7 @@ class AnalyzerManager:
                         continue
                 elif topic0 == WITHDRAWAL_TOPIC and log['address'].lower() == weth_address:
                     try:
-                        destination = '0x' + self.ensure_hex_string(log['topics'][1][-40:])
+                        destination = self.ensure_hex_string(log['topics'][1][-40:])
                         value = int(self.ensure_hex_string(log['data']), 16)
                         balance_changes[operator]['native'] = balance_changes[operator].get('native', 0) - value
                     except Exception as e:
@@ -191,11 +192,3 @@ class AnalyzerManager:
     def analyze_transaction_type(self, transaction: Dict[str, Any]) -> Dict[str, Any]:
         pass
 
-    @staticmethod
-    def ensure_hex_string(value):
-        if isinstance(value, str):
-            return value if value.startswith('0x') else '0x' + value
-        elif isinstance(value, bytes):
-            return '0x' + binascii.hexlify(value).decode('ascii')
-        else:
-            raise ValueError(f"Unexpected type for value: {type(value)}")

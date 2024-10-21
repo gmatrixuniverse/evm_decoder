@@ -37,12 +37,14 @@ class IndexableTransactionInput:
 
     def __getitem__(self, key: Union[int, str]) -> Any:
         if isinstance(key, int):
-            return self.params[key]
+            return list(self.params.values())[key]
         elif isinstance(key, str):
-            if self.param_names:
+            if key in self.params:
+                return self.params[key]
+            elif self.param_names:
                 index = self.param_names.get(key)
                 if index is not None:
-                    return self.params[index]
+                    return list(self.params.values())[index]
             raise KeyError(f"Parameter name '{key}' not found or named indexing is not supported for this transaction")
         else:
             raise TypeError("Invalid key type. Use int for index or str for name.")
