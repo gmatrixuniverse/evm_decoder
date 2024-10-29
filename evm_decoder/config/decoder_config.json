@@ -48,6 +48,16 @@
             {"name": "approvalTarget", "type": "address"},
             {"name": "params", "type": "uint256[]"},
             {"name": "feeAmount", "type": "uint256"}
+          ],
+          "0x70fef1da": [
+            {"name": "tokenIn", "type": "address"},
+            {"name": "tokenOut", "type": "address"},
+            {"name": "router", "type": "address"},
+            {"name": "pair", "type": "address"},
+            {"name": "amountIn", "type": "uint256"},
+            {"name": "amountOutMin", "type": "uint256"},
+            {"name": "medium", "type": "address"},
+            {"name": "dataoffset", "type": "uint256"}
           ]
         }
       },
@@ -62,16 +72,6 @@
           "anotherFunction(uint256 id,bytes32 data)": [
             {"name": "id", "type": "uint256"},
             {"name": "data", "type": "bytes32"}
-          ],
-          "0x70fef1da": [
-            {"name": "tokenIn", "type": "address"},
-            {"name": "tokenOut", "type": "address"},
-            {"name": "router", "type": "address"},
-            {"name": "pair", "type": "address"},
-            {"name": "amountIn", "type": "uint256"},
-            {"name": "amountOutMin", "type": "uint256"},
-            {"name": "medium", "type": "address"},
-            {"name": "dataoffset", "type": "uint256"}
           ]
         }
       }
