@@ -47,7 +47,7 @@ class TransactionDecoder(BaseDecoder):
         input_data = self.get_input_data(data)
         selector = input_data[:10]
         if selector in self.fixed_types:
-            print("fixed_types,", selector)
+            # print("fixed_types,", selector)
             return self._decode_fixed_type(input_data, selector)
         elif self.contract:
             return self._decode_abi(input_data)
