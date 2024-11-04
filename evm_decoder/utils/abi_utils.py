@@ -4,6 +4,8 @@ from eth_abi.registry import registry
 from eth_utils import function_signature_to_4byte_selector, event_abi_to_log_topic, decode_hex
 from typing import Dict, Any, List, Tuple
 from web3 import Web3
+from hexbytes import HexBytes
+from web3.datastructures import AttributeDict
 from .data_structures import IndexableEventLog
 
 abi_codec = ABICodec(registry)
@@ -108,3 +110,14 @@ def decode_log(params: List[Dict[str, Any]], log: Dict[str, Any]) -> Dict[str, A
 
 
     return indexed_args
+
+def convert_hexbytes(data):
+    if isinstance(data, HexBytes):
+        return data.hex()
+    elif isinstance(data, (list, tuple)):
+        return [convert_hexbytes(item) for item in data]
+    elif isinstance(data, dict):
+        return {key: convert_hexbytes(value) for key, value in data.items()}
+    elif isinstance(data, AttributeDict):
+        return AttributeDict({key: convert_hexbytes(value) for key, value in data.items()})
+    return data

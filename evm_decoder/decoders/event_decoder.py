@@ -1,10 +1,15 @@
 from .base_decoder import BaseDecoder
-from ..utils.abi_utils import load_abi, decode_log
+from ..utils.abi_utils import load_abi, decode_log, convert_hexbytes
 from ..utils.data_structures import IndexableEventLog
 from eth_utils import event_abi_to_log_topic
 from typing import Dict, Any, Optional, List, Tuple
 from web3 import Web3
 import json
+from hexbytes import HexBytes  # Add this import
+from web3.datastructures import AttributeDict
+
+
+
 
 class EventDecoder(BaseDecoder):
     def __init__(self, name: str, abi_path: Optional[str] = None, fixed_types: Optional[Dict[str, List[Dict[str, str]]]] = None):
@@ -48,9 +53,13 @@ class EventDecoder(BaseDecoder):
                 self.fixed_types[topic] = (event_abi['name'], abi_inputs)
 
     def can_decode(self, data: Any) -> bool:
-        if not isinstance(data, dict) or ('topics' not in data and 'topic0' not in data):
+        if ((not isinstance(data, dict)) and (not isinstance(data, AttributeDict))) or ('topics' not in data and 'topic0' not in data):
             return False
         topic0 = data['topic0'] if 'topic0' in data else data['topics'][0]
+        # Convert topic0 to string if it's HexBytes
+        if isinstance(topic0, HexBytes):
+            topic0 = topic0.hex()
+
         return topic0 in self.fixed_types or (self.contract and any(topic0 == event_abi_to_log_topic(e).hex() for e in self.contract.abi if e['type'] == 'event'))
 
 
@@ -59,6 +68,7 @@ class EventDecoder(BaseDecoder):
             if self.abi:
                 decoded_event = decode_event_log(self.abi, event)
             elif self.fixed_types:
+                event = convert_hexbytes(event)
                 decoded_event = self._decode_fixed_type(event)
             else:
                 return {"error": "No suitable decoder found for the event data"}
@@ -71,6 +81,10 @@ class EventDecoder(BaseDecoder):
 
     def _decode_fixed_type(self, data: Dict[str, Any]) -> Dict[str, Any]:
         topic0 = data['topics'][0] if 'topics' in data else data['topic0']
+        # Convert topic0 to string if it's HexBytes
+        if isinstance(topic0, HexBytes):
+            topic0 = topic0.hex()
+
         if topic0 in self.fixed_types:
             event_name, abi_inputs = self.fixed_types[topic0]
             decoded_log = decode_log(abi_inputs, data)

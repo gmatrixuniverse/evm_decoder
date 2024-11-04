@@ -38,7 +38,9 @@ class DecoderManager:
 
     def decode(self, data: Any) -> Dict[str, Any]:
         for decoder in self.decoders.values():
+            print(f"Checking if {decoder.name} can decode")
             if decoder.can_decode(data):
+                print(f"Decoding with {decoder.name}")
                 return decoder.decode(data)
         return {"error": "No suitable decoder found for the input data"}
 

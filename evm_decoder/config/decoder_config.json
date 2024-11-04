@@ -92,7 +92,7 @@
     ],
     "event_decoders": [
       {
-        "name": "custom_events",
+        "name": "banana_events",
         "type": "event",
         "fixed_types": {
           "0x9f849d23f4955d98202378ea318f2b0c7533695d3c9fb2a3931f0f919fa8c420": [
@@ -114,6 +114,21 @@
           "FeesCollected(uint256,address)": [
             {"name": "param0", "type": "uint256", "indexed": false},
             {"name": "param1", "type": "address", "indexed": false}
+          ]
+        }
+      },
+      {
+        "name": "V3_events",
+        "type": "event",
+        "fixed_types": {
+          "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67": [
+            {"name": "sender", "type": "address", "indexed": true},
+            {"name": "recipient", "type": "address", "indexed": true},
+            {"name": "amount0", "type": "uint256", "indexed": false},
+            {"name": "amount1", "type": "uint256", "indexed": false},
+            {"name": "sqrtPriceX96", "type": "uint160", "indexed": false},
+            {"name": "liquidity", "type": "int128", "indexed": false},
+            {"name": "tick", "type": "int24", "indexed": false}
           ]
         }
       },

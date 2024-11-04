@@ -21,6 +21,18 @@ pip install evm-decoder
 
 ## Usage
 
+It can decode logs:
+event_data = {
+    'topics': [
+        '0x0c2a2f565c7774c59e49ef6b3c255329f4d254147e06e724d3a8569bb7bd21ad',
+        None,
+        None,
+        None
+    ],
+    'data': '0x000000000000000000000000000000000000000000000000000388f27d8d3000000000000000000000000000c68bff79073939c96c8edb1c539b5362be1f64d1'
+}
+
+
 Here's a quick example of how to use EVM Decoder:
 
 python

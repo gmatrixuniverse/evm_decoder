@@ -1,8 +1,9 @@
 from .base_decoder import BaseDecoder
-from ..utils.abi_utils import load_abi, decode_function_input, decode_input
+from ..utils.abi_utils import load_abi, decode_function_input, decode_input, convert_hexbytes
 from ..utils.data_structures import IndexableTransactionInput
 from typing import Dict, Any, Optional
 from web3 import Web3
+from web3.datastructures import AttributeDict
 import pandas as pd
 
 class TransactionDecoder(BaseDecoder):
@@ -18,7 +19,7 @@ class TransactionDecoder(BaseDecoder):
                 self.fixed_types[selector] = (signature, params)
 
     def can_decode(self, data: Any) -> bool:
-        if not isinstance(data, dict) or'input' not in data:
+        if ((not isinstance(data, dict)) and (not isinstance(data, AttributeDict))) or ('input' not in data):
             return False
         input_data = self.get_input_data(data)
         selector = input_data[:10]
@@ -27,7 +28,6 @@ class TransactionDecoder(BaseDecoder):
     def get_input_data(self, data):
         if isinstance(data, dict):
             return data.get('input', None)
-        
         elif isinstance(data, pd.DataFrame):
             if 'input' in data.columns:
                 if len(data) == 1:
@@ -36,6 +36,8 @@ class TransactionDecoder(BaseDecoder):
                     return data['input']
             else:
                 return None
+        elif isinstance(data, AttributeDict):
+            return data.get('input', None)
         else:
             raise ValueError("Unsupported data type")
 
@@ -44,10 +46,10 @@ class TransactionDecoder(BaseDecoder):
         return input_data[:10]
 
     def decode(self, data: Any) -> Dict[str, Any]:
+        data = convert_hexbytes(data)
         input_data = self.get_input_data(data)
         selector = input_data[:10]
         if selector in self.fixed_types:
-            # print("fixed_types,", selector)
             return self._decode_fixed_type(input_data, selector)
         elif self.contract:
             return self._decode_abi(input_data)
