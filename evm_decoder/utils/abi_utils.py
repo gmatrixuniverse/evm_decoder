@@ -115,8 +115,8 @@ def decode_log(params: List[Dict[str, Any]], log: Dict[str, Any]) -> Dict[str, A
 
     return indexed_args
 
-def is_swap(data: Any) -> bool:
-    return data['topic'][0] == UNI_V2_SWAP_TOPIC or data['topic'][0] == UNI_V3_SWAP_TOPIC
+def is_pair_swap(pair_address: str, data: Any) -> bool:
+    return data['address'] == pair_address and (data['topic'][0] == UNI_V2_SWAP_TOPIC or data['topic'][0] == UNI_V3_SWAP_TOPIC)
 
 def convert_hexbytes(data):
     if isinstance(data, HexBytes):
