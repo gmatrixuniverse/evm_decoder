@@ -4,7 +4,7 @@ import logging
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, project_root)
 
-from evm_decoder.analyzers.analyzer_manager import AnalyzerManager
+from evm_decoder.analyzer_manager import AnalyzerManager
 
 # Initialize the AnalyzerManager
 analyzer_manager = AnalyzerManager()
@@ -80,5 +80,5 @@ transaction_data = {
     ]
 }
 
-analysis_result = analyzer_manager.analyze_from_balance_change(transaction_data)  # Empty receipt for this example
+analysis_result = analyzer_manager.analyze_balance_changes(transaction_data)  # Empty receipt for this example
 print("Transaction analysis result:", analysis_result)

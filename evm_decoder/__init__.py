@@ -1,8 +1,7 @@
 from .decoder_manager import DecoderManager
-from .analyzers.analyzer_manager import AnalyzerManager
-from .decoders.transaction_decoder import TransactionDecoder
-from .decoders.event_decoder import EventDecoder
-from .decoders.raw_data_decoder import RawDataDecoder
+from .analyzer_manager import AnalyzerManager
 
-__all__ = ['DecoderManager', 'AnalyzerManager', 'TransactionDecoder', 'EventDecoder', 'RawDataDecoder']
-__version__ = '0.1.0'
+__all__ = [
+    'DecoderManager',
+    'AnalyzerManager'
+]

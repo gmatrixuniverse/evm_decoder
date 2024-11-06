@@ -1,8 +1,8 @@
 from typing import Dict, Any, List
 from web3 import Web3
 from chain_index import get_chain_info
-from ..utils.constants import TRANSFER_TOPIC, WITHDRAWAL_TOPIC, DEPOSIT_TOPIC, ERC20_TRANSFER_TOPIC
-from ..utils.hex_utils import ensure_hex_string
+from .utils.constants import TRANSFER_TOPIC, WITHDRAWAL_TOPIC, DEPOSIT_TOPIC, ERC20_TRANSFER_TOPIC
+from .utils.hex_utils import ensure_hex_string
 import logging
 import binascii
 
@@ -12,7 +12,7 @@ class AnalyzerManager:
     def __init__(self):
         pass
 
-    def analyze_transaction(self, tx_with_logs: Dict[str, Any], receipt: Dict[str, Any]) -> Dict[str, Any]:
+    def analyze_transaction(self, tx_with_logs: Dict[str, Any]) -> Dict[str, Any]:
         # Combine results from different analyzers
         return {
             "balance_analysis": self.analyze_balance_changes(tx_with_logs),
@@ -56,12 +56,6 @@ class AnalyzerManager:
                             'value': value,
                             'token_address': "native"
                         })
-                        # token_transfers.append({
-                        #     'from_address': operator,
-                        #     'to_address': weth_address,
-                        #     'value': value,
-                        #     'token_address': weth_address
-                        # })
                     except Exception as e:
                         logger.error(f"Error processing WETH withdrawal event: {str(e)}")
                         continue
@@ -104,46 +98,6 @@ class AnalyzerManager:
             if to_address not in balance_changes:
                 balance_changes[to_address] = {}
             balance_changes[to_address][token_address] = balance_changes[to_address].get(token_address, 0) + value
-
-
-        return balance_changes
-        # for log in tx_with_logs['logs']:
-        #     if log.topics:
-        #         topic0 = self.ensure_hex_string(log.topics[0])
-        #         if topic0 == TRANSFER_TOPIC:
-        #             try:
-        #                 from_address = '0x' + self.ensure_hex_string(log.topics[1])[-40:]
-        #                 to_address = '0x' + self.ensure_hex_string(log.topics[2])[-40:]
-        #                 value = int(self.ensure_hex_string(log.data), 16)
-        #                 token_address = log.address.lower()
-
-        #                 # Update balance for sender
-        #                 if from_address not in balance_changes:
-        #                     balance_changes[from_address] = {}
-        #                 balance_changes[from_address][token_address] = balance_changes[from_address].get(token_address, 0) - value
-
-        #                 # Update balance for receiver
-        #                 if to_address not in balance_changes:
-        #                     balance_changes[to_address] = {}
-        #                 balance_changes[to_address][token_address] = balance_changes[to_address].get(token_address, 0) + value
-        #             except Exception as e:
-        #                 # logger.error(f"Error processing event in get_balance_change: {str(e)}")
-        #                 continue
-        #         elif topic0 == WITHDRAWAL_TOPIC and log.address.lower() == weth_address:
-        #             try:
-        #                 value = int(self.ensure_hex_string(log.data), 16)
-        #                 if operator not in balance_changes:
-        #                     balance_changes[operator] = {}
-        #                 balance_changes[operator]['native'] = balance_changes[operator].get('native', 0) + value
-        #             except Exception as e:
-        #                 # logger.error(f"Error processing WETH withdrawal event: {str(e)}")
-        #                 continue
-
-        # # Account for native token transfer in the transaction
-        # if operator not in balance_changes:
-        #     balance_changes[operator] = {}
-        # balance_changes[operator]['native'] = balance_changes[operator].get('native', 0) - int(tx_with_logs['value'])
-
         return balance_changes
 
     def analyze_from_balance_change(self, tx_with_logs: Dict[str, Any]) -> Dict[str, Any]:

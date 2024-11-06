@@ -1,10 +1,10 @@
+from typing import Dict, Any, Optional
+from web3 import Web3
+import pandas as pd
+from web3.datastructures import AttributeDict
 from .base_decoder import BaseDecoder
 from ..utils.abi_utils import load_abi, decode_function_input, decode_input, convert_hexbytes
 from ..utils.data_structures import IndexableTransactionInput
-from typing import Dict, Any, Optional
-from web3 import Web3
-from web3.datastructures import AttributeDict
-import pandas as pd
 
 class TransactionDecoder(BaseDecoder):
     def __init__(self, name: str, abi_path: Optional[str] = None, fixed_types: Optional[Dict[str, Any]] = None):

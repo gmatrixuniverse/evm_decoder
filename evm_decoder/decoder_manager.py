@@ -48,3 +48,4 @@ class DecoderManager:
         if decoder_name in self.decoders:
             return self.decoders[decoder_name].decode(data)
         return {"error": f"Decoder '{decoder_name}' not found"}
+

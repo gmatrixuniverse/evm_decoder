@@ -7,13 +7,17 @@ from web3 import Web3
 from hexbytes import HexBytes
 from web3.datastructures import AttributeDict
 from .data_structures import IndexableEventLog
-
+from .constants import UNI_V2_SWAP_TOPIC, UNI_V3_SWAP_TOPIC
 abi_codec = ABICodec(registry)
 w3 = Web3()
 
 def load_abi(abi_path: str) -> List[Dict[str, Any]]:
-    with open(abi_path, 'r') as abi_file:
-        return json.load(abi_file)
+    """Load ABI from a JSON file"""
+    try:
+        with open(abi_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        raise ValueError(f"Failed to load ABI from {abi_path}: {str(e)}")
 
 def get_function_selector(function_signature: str) -> str:
     return "0x" + function_signature_to_4byte_selector(function_signature).hex()
@@ -110,6 +114,9 @@ def decode_log(params: List[Dict[str, Any]], log: Dict[str, Any]) -> Dict[str, A
 
 
     return indexed_args
+
+def is_swap(data: Any) -> bool:
+    return data['topic'][0] == UNI_V2_SWAP_TOPIC or data['topic'][0] == UNI_V3_SWAP_TOPIC
 
 def convert_hexbytes(data):
     if isinstance(data, HexBytes):

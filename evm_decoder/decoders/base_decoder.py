@@ -9,3 +9,5 @@ class BaseDecoder(ABC):
     @abstractmethod
     def decode(self, data: Any) -> Dict[str, Any]:
         pass
+
+__all__ = ['BaseDecoder']
