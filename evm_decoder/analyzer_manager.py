@@ -98,6 +98,10 @@ class AnalyzerManager:
             if to_address not in balance_changes:
                 balance_changes[to_address] = {}
             balance_changes[to_address][token_address] = balance_changes[to_address].get(token_address, 0) + value
+        # add all address native balance changes even 0
+        for address in balance_changes:
+            balance_changes[address]['native'] = balance_changes[address].get('native', 0) + int(tx_with_logs['value'])
+
         return balance_changes
 
     def analyze_from_balance_change(self, tx_with_logs: Dict[str, Any]) -> Dict[str, Any]:
