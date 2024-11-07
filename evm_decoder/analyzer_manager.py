@@ -22,7 +22,7 @@ class AnalyzerManager:
     
     def analyze_token_transfers(self, tx_with_logs: Dict[str, Any]) -> List[Dict[str, Any]]:
         token_transfers: List[Dict[str, Any]] = []
-        chain_info = get_chain_info(tx_with_logs['chain_id'])
+        chain_info = get_chain_info(tx_with_logs['chainId'])
         weth_address = chain_info.wrapperNativeCurrency.contract.lower()
         tx_from = tx_with_logs['from'].lower()
         tx_to = tx_with_logs['to'].lower()
@@ -107,7 +107,7 @@ class AnalyzerManager:
     def analyze_from_balance_change(self, tx_with_logs: Dict[str, Any]) -> Dict[str, Any]:
         balance_changes: Dict[str, Dict[str, int]] = {}
 
-        chain_info = get_chain_info(tx_with_logs['chain_id'])
+        chain_info = get_chain_info(tx_with_logs['chainId'])
         weth_address = chain_info.wrapperNativeCurrency.contract.lower()
         operator = tx_with_logs['from'].lower()
         value = int(tx_with_logs['value'])

@@ -15,7 +15,7 @@ transaction_data = {
     'from': '0x05756692cd1BDDc2770DEfee04C2B1476A0EBAbA',
     'to': '0xEf1c6E67703c7BD7107eed8303Fbe6EC2554BF6B',
     'value': '18600000000000000',
-    'chain_id': 1,  # Ethereum Mainnet
+    'chainId': 1,  # Ethereum Mainnet
     'logs': [
         {
             'address': '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
