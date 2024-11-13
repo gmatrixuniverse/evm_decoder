@@ -31,6 +31,6 @@ setup(
     ],
     include_package_data=True,
     package_data={
-        "evm_decoder": ["config/*.json"],
+        "evm_decoder": ["config/*.json", "config/abi/*.json"],
     },
 )
