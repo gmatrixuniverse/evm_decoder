@@ -42,7 +42,7 @@ class ContractManager:
         Raises:
             ValueError: If contract type is not supported
         """
-        contract_key = f"{contract_type}"
+        contract_key = f"{contract_type}_{address}"
         
         if contract_key in self.contracts:
             return self.contracts[contract_key]
